@@ -1,10 +1,22 @@
+#left off doing game over text. made font and text, need to render at ground collision
+
 import pygame, random, time
 
 pygame.init( )
 screen = pygame.display.set_mode((800,600))
 clock = pygame.time.Clock()
 
-bird_x = 300 #STEP 1
+score = 0
+
+scorefont = pygame.font.Font('freesansbold.ttf', 50)
+birdScoreFont = scorefont.render("Score: " + str(score), True, (0,0,0), None)
+birdScoreRect = birdScoreFont.get_rect()
+birdScoreRect.center = (0,0)
+
+gameoverfont = pygame.font.Font('freesansbold.ttf', 200)
+gameoverText = gameoverfont.render("GAME OVER.", True, (255,0,0), None)
+
+bird_x = 300
 bird_y = 300
 yspeed = 0
 canJump = True
@@ -31,6 +43,8 @@ while gamerunning == True:
   yspeed += 1.65
 
   if pipe_x < -100:
+    score = score + 1
+    birdScoreFont = scorefont.render("Score: " + str(score), True, (0,0,0), None)
     pipe_x = 900
     pipe_y = random.randint(350,550)
 
@@ -39,6 +53,7 @@ while gamerunning == True:
   #======COLLISIONS======
   #GROUND COLLISION
   if bird_y >= 560:
+    time.sleep(2)
     gamerunning = False
 
   #LOWER PIPE COLLISION
@@ -51,10 +66,10 @@ while gamerunning == True:
   
   #=====RENDERINGS=======
   screen.fill((204, 230, 255))
-                                    #STEP 2
   pygame.draw.rect(screen, (0,0,0), (bird_x, bird_y, 40, 40))
   pygame.draw.rect(screen, (0,255,0), (pipe_x, pipe_y, 100, 600))
   pygame.draw.rect(screen, (0,255,0), (pipe_x, pipe_y - 600 - 250, 100, 600))
+  screen.blit(birdScoreFont, (0,0))
   pygame.display.update()
   clock.tick(25)
 
